@@ -1,0 +1,6 @@
+#vs code config
+.vscode
+
+#build files
+build/
+
