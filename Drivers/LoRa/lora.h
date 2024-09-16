@@ -1,3 +1,13 @@
+#ifndef SRC_LORA_H_
+#define SRC_LORA_H_
+
+#include <stdint.h>
+#include <main.h>
+
+#define NSS_PIN_HIGH 	LL_GPIO_SetOutputPin(GPIOA, SPI_NSS_Pin);
+#define NSS_PIN_LOW		LL_GPIO_ResetOutputPin(GPIOA, SPI_NSS_Pin);
+#define SPI_HANDLER	SPI3
+
 
 
 #define ADDR_REGFIFO					0x00
@@ -27,3 +37,11 @@
 #define ADDR_REGDIOMAPPING2				0x41
 #define ADDR_REGVERSION					0x42
 #define ADDR_REGRSSIVALUE				0x1B
+
+void LoRa_Write(uint8_t reg_address, uint8_t reg_value);
+uint8_t LoRa_Receive(uint8_t reg_address);
+
+
+
+
+#endif /* SRC_LORA_H_ */
