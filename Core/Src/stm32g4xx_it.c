@@ -20,6 +20,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32g4xx_it.h"
+#include "lora.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -178,6 +179,19 @@ void EXTI15_10_IRQHandler(void)
 
   /* USER CODE END EXTI15_10_IRQn 1 */
 }
+
+static int8_t test;
+
+void EXTI2_IRQHandler(void)
+{
+    if(LL_EXTI_IsActiveFlag_0_31(LL_EXTI_LINE_2) != RESET)
+    {
+        LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_2);
+        LoRa_Recieve_8(&test);
+        LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
+    }
+}
+
 
 /**
   * @brief This function handles TIM7 global interrupt.
