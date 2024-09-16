@@ -96,7 +96,7 @@ void LoRa_Set_Spreading_Factor(spreading_factor_e SF)
 }
 
 
-void LoRa_Set_Crc(bool set_rest)
+void LoRa_Set_CRC(bool set_rest)
 {
 	uint8_t read_value = LoRa_Receive(ADDR_REGMODEMCONFIG2);
 	if(set_rest == SET)
@@ -149,7 +149,7 @@ void LoRa_Set_Output_Power(uint8_t value)
 }
 
 
-void Lora_Set_Lna_Gain(uint8_t value)
+void LoRa_Set_Lna_Gain(uint8_t value)
 {
 	if(value <= 7)
 	{
@@ -157,4 +157,75 @@ void Lora_Set_Lna_Gain(uint8_t value)
 		SET_BITS(read_value, (value)<<5);
 		LoRa_Write(ADDR_REGLNA, read_value);
 	}
+}
+
+
+void LoRa_Init(lora_s *lora)
+{
+	LoRa_Mode(SLEEP);
+	/* Set LoRa Mode */
+	LoRa_Write(ADDR_REGOPMODE, 0x88);		
+	LoRa_Set_Bandwidth(lora->bandwidth);
+	LoRa_Set_Spreading_Factor(lora->sf);
+	LoRa_Set_Pa_Boost(lora->pa_boost);
+	LoRa_Set_Max_Output_Power(lora->max_power);
+	LoRa_Set_Output_Power(lora->output_power);
+	LoRa_Set_Lna_Gain(lora->lna_gain);
+}
+
+
+void Lora_Init_Receive()
+{
+	uint8_t fifo_current_address = 0;
+
+	/* Map Pin DIO0 for RX done interrupt */
+    LoRa_Write(ADDR_REGDIOMAPPING1, 0x00);  
+	/* Clear interrupts flags */
+    LoRa_Write(ADDR_REGIRQFLAGS, 0xFF);    
+	/* CRC only on TX side in Explicit mode */
+	LoRa_Set_CRC(false);					
+	LoRa_Mode(STDBY);
+	fifo_current_address = LoRa_Receive(ADDR_REGFIFORXBASEADDR);	
+	LoRa_Write(ADDR_REGFIFOADDPTR, fifo_current_address);
+	LoRa_Mode(RXCONTINUOUS);
+}
+
+
+void LoRa_Recieve_8(int8_t *data_buffer)
+{
+	uint8_t bytes_received = LoRa_Receive(ADDR_REGRXNBBYTES);
+	for (uint8_t i = 0; i < bytes_received; i++)
+	{
+		/* Write data to FIFO. Pointer increment itself */
+		data_buffer[i] = LoRa_Receive(ADDR_REGFIFO);     			
+	}
+	/* Clear interrupts flags */
+	LoRa_Write(ADDR_REGIRQFLAGS, 0xFF);
+}
+
+
+void LoRa_Init_Transmit()
+{
+	/* Map Pin DIO0 for interrupt when TX done */
+    LoRa_Write(ADDR_REGDIOMAPPING1, 0x40);
+	/* Clear interrupts flags */
+    LoRa_Write(ADDR_REGIRQFLAGS, 0xFF);     
+    LoRa_Set_CRC(true); 					
+}
+
+
+void LoRa_Transmit_8(uint8_t *data, uint8_t length)
+{
+	uint8_t fifo_current_address = 0;
+	LoRa_Mode(STDBY);
+	/* Read pointer from where data to Tx will be stored */
+	fifo_current_address = LoRa_Receive(ADDR_REGFIFOTXBASEADDR);
+	/* Write address of pointer */
+	LoRa_Write(ADDR_REGFIFOADDPTR, fifo_current_address);       
+	LoRa_Write(ADDR_REGPAYLOADLENGTH, length);                  
+	for (uint8_t i = 0; i < length; i++)
+	{
+		LoRa_Write(ADDR_REGFIFO, data[i]);                      
+	}
+	LoRa_Mode(TX);
 }

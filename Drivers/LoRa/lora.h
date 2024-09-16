@@ -84,13 +84,13 @@ typedef enum {
 	SF_9,
 	SF_10,
 	SF_11,
-	SF_12,
+    SF_12,
 }spreading_factor_e;
 
 
 typedef struct
 {
-	bandwidth_e bandwidth;
+    bandwidth_e bandwidth;
 	spreading_factor_e sf;
 	bool pa_boost;
 	uint8_t max_power;
@@ -105,10 +105,15 @@ void LoRa_Mode(mode_e mode);
 void LoRa_Set_Bandwidth(bandwidth_e bandwidth);
 void LoRa_Set_Coding_Rate(coding_rate_e coding_rate);
 void LoRa_Set_Spreading_Factor(spreading_factor_e SF);
-void LoRa_Set_Crc(bool set_rest);
+void LoRa_Set_CRC(bool set_rest);
 void LoRa_Set_Pa_Boost(bool set_rest);
 void LoRa_Set_Max_Output_Power(uint8_t value);
 void LoRa_Set_Output_Power(uint8_t value);
 void Lora_Set_Lna_Gain(uint8_t value);
+void LoRa_Init(lora_s *lora);
+void Lora_Init_Receive();
+void LoRa_Recieve_8(int8_t *data_buffer);
+void LoRa_Init_Transmit();
+void LoRa_Transmit_8(uint8_t *data, uint8_t length);
 
 #endif /* SRC_LORA_H_ */
