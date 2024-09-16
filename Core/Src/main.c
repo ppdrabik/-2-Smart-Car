@@ -19,10 +19,12 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "spi.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "lora.h"
 
 /* USER CODE END Includes */
 
@@ -90,7 +92,23 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_SPI3_Init();
   /* USER CODE BEGIN 2 */
+
+  LL_SPI_Enable(SPI3);
+
+  lora_s lora =
+  {
+	  .bandwidth = khz_125,
+	  .sf = SF_10,
+	  .pa_boost = SET,
+	  .max_power = 3,
+	  .output_power = 14,
+	  .lna_gain = 6
+  };
+
+  LoRa_Init(&lora);
+  Lora_Init_Receive();
 
   /* USER CODE END 2 */
 
