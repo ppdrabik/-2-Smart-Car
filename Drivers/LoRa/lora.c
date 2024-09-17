@@ -3,6 +3,8 @@
 static void SPI_Write_8(uint8_t data);
 static uint8_t SPI_Receive_8(uint8_t data);
 
+static rx_buffer_s rx_buffer;
+
 static void SPI_Write_8(uint8_t data)
 {
 	/* Wait until TX buffer is empty */
@@ -228,4 +230,14 @@ void LoRa_Transmit_8(uint8_t *data, uint8_t length)
 		LoRa_Write(ADDR_REGFIFO, data[i]);                      
 	}
 	LoRa_Mode(TX);
+}
+
+void LoRa_It_Rx_Callback(void)
+{
+	LoRa_Recieve_8(rx_buffer.data);
+}
+
+const rx_buffer_s *LoRa_Get_Buffer(void)
+{
+	return &rx_buffer;
 }

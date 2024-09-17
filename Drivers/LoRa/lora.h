@@ -12,6 +12,7 @@
 #define CLEAR_BITS(REG, MASK)   ((REG) &= ~(MASK))
 #define SET_BITS(REG, MASK)     ((REG) |= (MASK))
 
+#define RX_BUFFER_SIZE	2
 
 #define ADDR_REGFIFO					0x00
 #define ADDR_REGOPMODE					0x01
@@ -98,6 +99,11 @@ typedef struct
 	uint8_t lna_gain;
 }lora_s;
 
+typedef struct
+{
+    int8_t data[RX_BUFFER_SIZE];
+}rx_buffer_s;
+
 
 void LoRa_Write(uint8_t reg_address, uint8_t reg_value);
 uint8_t LoRa_Receive(uint8_t reg_address);
@@ -115,5 +121,7 @@ void Lora_Init_Receive();
 void LoRa_Recieve_8(int8_t *data_buffer);
 void LoRa_Init_Transmit();
 void LoRa_Transmit_8(uint8_t *data, uint8_t length);
+void LoRa_It_Rx_Callback(void);
+const rx_buffer_s *LoRa_Get_Buffer(void);
 
 #endif /* SRC_LORA_H_ */
