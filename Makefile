@@ -81,6 +81,7 @@ Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_gpio.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_pwr.c \
 Core/Src/spi.c \
 Drivers/LoRa/lora.c \
+Drivers/Motor/motor.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_spi.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_dma.c
 
@@ -155,7 +156,8 @@ C_INCLUDES =  \
 -IDrivers/BSP/STM32G4xx_Nucleo \
 -IDrivers/CMSIS/Device/ST/STM32G4xx/Include \
 -IDrivers/CMSIS/Include \
--IDrivers/Lora
+-IDrivers/Lora \
+-IDrivers/Motor
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections
