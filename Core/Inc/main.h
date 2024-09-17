@@ -41,6 +41,7 @@ extern "C" {
 #include "stm32g4xx_ll_pwr.h"
 #include "stm32g4xx_ll_dma.h"
 #include "stm32g4xx_ll_spi.h"
+#include "stm32g4xx_ll_tim.h"
 #include "stm32g4xx_ll_gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -79,8 +80,20 @@ void Error_Handler(void);
 #define RCC_OSC_IN_GPIO_Port GPIOF
 #define RCC_OSC_OUT_Pin LL_GPIO_PIN_1
 #define RCC_OSC_OUT_GPIO_Port GPIOF
+#define PWM_CH1_Pin LL_GPIO_PIN_0
+#define PWM_CH1_GPIO_Port GPIOA
+#define PWM_CH2_Pin LL_GPIO_PIN_1
+#define PWM_CH2_GPIO_Port GPIOA
 #define SPI_NSS_Pin LL_GPIO_PIN_4
 #define SPI_NSS_GPIO_Port GPIOA
+#define IN_4_Pin LL_GPIO_PIN_11
+#define IN_4_GPIO_Port GPIOB
+#define IN_3_Pin LL_GPIO_PIN_12
+#define IN_3_GPIO_Port GPIOB
+#define IN_2_Pin LL_GPIO_PIN_11
+#define IN_2_GPIO_Port GPIOA
+#define IN_1_Pin LL_GPIO_PIN_12
+#define IN_1_GPIO_Port GPIOA
 #define T_SWDIO_Pin LL_GPIO_PIN_13
 #define T_SWDIO_GPIO_Port GPIOA
 #define T_SWCLK_Pin LL_GPIO_PIN_14
