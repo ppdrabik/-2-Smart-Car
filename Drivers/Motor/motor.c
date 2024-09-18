@@ -97,14 +97,17 @@ void MOTOR_Set_Direction()
 	{
 	case IDLE:
 		MOTOR_1_Idle();
+        printf("IDLE:%lu \n\r", TIM2->CCR1);
 		break;
 
 	case DRIVE:
 		MOTOR_1_Drive();
+        printf("DRIVE:%lu \n\r", TIM2->CCR1);
 		break;
 
 	case REVERSE:
 		MOTOR_1_Reverse();
+        printf("REVERSE:%lu \n\r", TIM2->CCR1);
 		break;
 
 	default: break;
@@ -114,14 +117,17 @@ void MOTOR_Set_Direction()
 	{
 	case IDLE:
 		MOTOR_2_Idle();
+        printf("IDLE:%lu \n\r", TIM2->CCR2);
 		break;
 
 	case RIGHT:
 		MOTOR_2_Right();
+        printf("RIGHT:%lu \n\r", TIM2->CCR2);
 		break;
 
 	case LEFT:
 		MOTOR_2_Left();
+        printf("LEFT:%lu \n\r", TIM2->CCR2);
 		break;
 
 	default: break;

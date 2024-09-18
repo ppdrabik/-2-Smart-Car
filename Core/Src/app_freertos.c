@@ -30,7 +30,7 @@ TaskHandle_t xBlinkTaskHandle = NULL;
 
 void MX_FREERTOS_Init(void) 
 {
-    xTaskCreate(BlinkTask, "BlinkTask", 50, NULL, 0, &xBlinkTaskHandle);
+    xTaskCreate(BlinkTask, "BlinkTask", 100, NULL, 0, &xBlinkTaskHandle);
 }
 
 
@@ -40,7 +40,10 @@ void BlinkTask(void * pvParameters)
     for(;;)
     {
         vTaskDelay(xDelay);
-        LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
+        if (!(LL_GPIO_IsOutputPinSet(GPIOA, LL_GPIO_PIN_5)))
+        {
+            LL_GPIO_SetOutputPin(GPIOA, LL_GPIO_PIN_5);
+        }
         printf("Test \n\r");
     }
 }

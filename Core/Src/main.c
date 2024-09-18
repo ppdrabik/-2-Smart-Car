@@ -98,7 +98,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   LL_SPI_Enable(SPI3);
-
+  LL_TIM_EnableCounter(TIM2);
+  LL_TIM_CC_EnableChannel(TIM2,LL_TIM_CHANNEL_CH1);
+  LL_TIM_CC_EnableChannel(TIM2,LL_TIM_CHANNEL_CH2);
+  
   lora_s lora =
   {
 	  .bandwidth = khz_125,
