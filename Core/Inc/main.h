@@ -31,6 +31,7 @@ extern "C" {
 #include "stm32g4xx_nucleo.h"
 #include <stdio.h>
 
+#include "stm32g4xx_ll_dma.h"
 #include "stm32g4xx_ll_rcc.h"
 #include "stm32g4xx_ll_bus.h"
 #include "stm32g4xx_ll_crs.h"
@@ -39,7 +40,6 @@ extern "C" {
 #include "stm32g4xx_ll_cortex.h"
 #include "stm32g4xx_ll_utils.h"
 #include "stm32g4xx_ll_pwr.h"
-#include "stm32g4xx_ll_dma.h"
 #include "stm32g4xx_ll_spi.h"
 #include "stm32g4xx_ll_tim.h"
 #include "stm32g4xx_ll_gpio.h"
@@ -86,6 +86,8 @@ void Error_Handler(void);
 #define PWM_CH2_GPIO_Port GPIOA
 #define SPI_NSS_Pin LL_GPIO_PIN_4
 #define SPI_NSS_GPIO_Port GPIOA
+#define PWM_DMA_Pin LL_GPIO_PIN_6
+#define PWM_DMA_GPIO_Port GPIOA
 #define IN_4_Pin LL_GPIO_PIN_11
 #define IN_4_GPIO_Port GPIOB
 #define IN_3_Pin LL_GPIO_PIN_12

@@ -19,6 +19,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "cmsis_os.h"
+#include "dma.h"
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
@@ -93,8 +94,10 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_SPI3_Init();
+  MX_DMA_Init();
   MX_TIM2_Init();
+  MX_SPI3_Init();
+  MX_TIM3_Init();
   /* USER CODE BEGIN 2 */
 
   LL_SPI_Enable(SPI3);
