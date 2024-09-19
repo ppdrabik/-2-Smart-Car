@@ -90,6 +90,7 @@ Core/Src/tim.c \
 Drivers/BSP/STM32G4xx_Nucleo/stm32g4xx_nucleo.c \
 Drivers/LoRa/lora.c \
 Drivers/Motor/motor.c \
+Drivers/RGB_LED/rgb.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_cortex.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_dma.c \
@@ -220,6 +221,7 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Include \
 -IDrivers/Lora \
 -IDrivers/Motor \
+-IDrivers/RGB_LED \
 -IDrivers/STM32G4xx_HAL_Driver/Inc \
 -IDrivers/STM32G4xx_HAL_Driver/Inc/Legacy \
 -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS \

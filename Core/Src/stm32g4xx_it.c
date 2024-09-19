@@ -209,6 +209,31 @@ void TIM7_IRQHandler(void)
   /* USER CODE END TIM7_IRQn 1 */
 }
 
+void TIM3_IRQHandler(void)
+{
+  /* USER CODE BEGIN TIM2_IRQn 0 */
+  LL_TIM_ClearFlag_UPDATE(TIM3);
+  /* USER CODE END TIM2_IRQn 0 */
+  /* USER CODE BEGIN TIM2_IRQn 1 */
+
+  /* USER CODE END TIM2_IRQn 1 */
+}
+
 /* USER CODE BEGIN 1 */
 
 /* USER CODE END 1 */
+void DMA1_Channel1_IRQHandler(void)
+{
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 0 */
+  /* USER CODE END DMA1_Channel1_IRQn 0 */
+  if (LL_DMA_IsActiveFlag_TC1(DMA1))
+    {
+      LL_DMA_ClearFlag_TC1(DMA1);
+	    LL_DMA_ClearFlag_HT1(DMA1);
+      LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
+      LL_TIM_DisableCounter(TIM3);
+    }
+  /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
+
+  /* USER CODE END DMA1_Channel1_IRQn 1 */
+}
