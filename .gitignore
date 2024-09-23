@@ -4,3 +4,5 @@
 #build files
 build/
 
+#svd
+STM32G491xx.svd
