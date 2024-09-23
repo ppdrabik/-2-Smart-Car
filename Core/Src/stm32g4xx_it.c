@@ -22,6 +22,8 @@
 #include "stm32g4xx_it.h"
 #include "lora.h"
 #include "motor.h"
+#include "rgb.h"
+
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -230,8 +232,11 @@ void DMA1_Channel1_IRQHandler(void)
     {
       LL_DMA_ClearFlag_TC1(DMA1);
 	    LL_DMA_ClearFlag_HT1(DMA1);
+      LL_DMA_ClearFlag_GI1(DMA1);
+
       LL_DMA_DisableChannel(DMA1, LL_DMA_CHANNEL_1);
       LL_TIM_DisableCounter(TIM3);
+      RGB_Reset_DMA_Busy_Flag();
     }
   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
 
