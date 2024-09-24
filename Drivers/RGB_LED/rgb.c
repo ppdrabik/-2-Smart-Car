@@ -12,11 +12,11 @@ static void RGB_Bits_To_Byte(uint32_t rgb)
 	{
 		if ((rgb >> i) & 0x01)
 		{
-			led_data.rgb_to_send[i] = LED_HIGH_SIGNAL_PWM;
+			led_data.rgb_to_send[23 - i] = LED_HIGH_SIGNAL_PWM;
 		}
 		else
 		{
-			led_data.rgb_to_send[i] = LED_LOW_SIGNAL_PWM;
+			led_data.rgb_to_send[23 - i] = LED_LOW_SIGNAL_PWM;
 		}
 	}
 }
@@ -49,13 +49,12 @@ void RGB_Init(void)
 
 led_status_e RGB_Set_Color(uint8_t r, uint8_t g, uint8_t b)
 {
-	uint32_t rgb = (g | r << 8 | b << 16);
+	uint32_t rgb = (b | r << 8 | g << 16);
 	led_data.current_r = r;
 	led_data.current_g = g;
 	led_data.current_b = b;
 
 	while (led_data.dma_bussy_flag == true) {};
-
 
 	RGB_Bits_To_Byte(rgb);
 	LL_DMA_ConfigAddresses(DMA1, LL_DMA_CHANNEL_1, (uint32_t)&led_data.rgb_to_send, (uint32_t)&TIM3->CCR1, LL_DMA_DIRECTION_MEMORY_TO_PERIPH);
@@ -142,4 +141,3 @@ const bool *RGB_Get_DMA_Bussy_Flag()
 {
 	return &led_data.dma_bussy_flag;
 }
-
