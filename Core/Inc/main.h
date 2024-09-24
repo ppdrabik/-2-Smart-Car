@@ -80,6 +80,9 @@ void Error_Handler(void);
 #define RCC_OSC_IN_GPIO_Port GPIOF
 #define RCC_OSC_OUT_Pin LL_GPIO_PIN_1
 #define RCC_OSC_OUT_GPIO_Port GPIOF
+#define VL530LX_IT_Pin LL_GPIO_PIN_3
+#define VL530LX_IT_GPIO_Port GPIOC
+#define VL530LX_IT_EXTI_IRQn EXTI3_IRQn
 #define PWM_CH1_Pin LL_GPIO_PIN_0
 #define PWM_CH1_GPIO_Port GPIOA
 #define PWM_CH2_Pin LL_GPIO_PIN_1

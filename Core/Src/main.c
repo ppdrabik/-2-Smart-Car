@@ -20,6 +20,7 @@
 #include "main.h"
 #include "cmsis_os.h"
 #include "dma.h"
+#include "i2c.h"
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
@@ -27,6 +28,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "lora.h"
+#include "rgb.h"
 
 /* USER CODE END Includes */
 
@@ -98,6 +100,7 @@ int main(void)
   MX_TIM2_Init();
   MX_SPI3_Init();
   MX_TIM3_Init();
+  MX_I2C1_Init();
   /* USER CODE BEGIN 2 */
 
   LL_SPI_Enable(SPI3);
@@ -117,6 +120,8 @@ int main(void)
 
   LoRa_Init(&lora);
   Lora_Init_Receive();
+  RGB_Init();
+  RGB_Set_Color(255, 125, 0);
 
   /* USER CODE END 2 */
 

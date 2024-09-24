@@ -78,6 +78,7 @@ C_SOURCES =  \
 Core/Src/app_freertos.c \
 Core/Src/dma.c \
 Core/Src/gpio.c \
+Core/Src/i2c.c \
 Core/Src/main.c \
 Core/Src/spi.c \
 Core/Src/stm32g4xx_hal_msp.c \
@@ -87,6 +88,7 @@ Core/Src/syscalls.c \
 Core/Src/sysmem.c \
 Core/Src/system_stm32g4xx.c \
 Core/Src/tim.c \
+Core/Src/vl53l0x.c \
 Drivers/BSP/STM32G4xx_Nucleo/stm32g4xx_nucleo.c \
 Drivers/LoRa/lora.c \
 Drivers/Motor/motor.c \
@@ -100,6 +102,8 @@ Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ex.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_flash_ramfunc.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_gpio.c \
+Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_i2c.c \
+Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_i2c_ex.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_pwr_ex.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_hal_rcc.c \
@@ -117,6 +121,13 @@ Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_pwr.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_spi.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_tim.c \
 Drivers/STM32G4xx_HAL_Driver/Src/stm32g4xx_ll_utils.c \
+Drivers/VL53L0X/core/src/vl53l0x_api.c \
+Drivers/VL53L0X/core/src/vl53l0x_api_calibration.c \
+Drivers/VL53L0X/core/src/vl53l0x_api_core.c \
+Drivers/VL53L0X/core/src/vl53l0x_api_ranging.c \
+Drivers/VL53L0X/core/src/vl53l0x_api_strings.c \
+Drivers/VL53L0X/platform/src/vl53l0x_platform.c \
+Drivers/VL53L0X/platform/src/vl53l0x_platform_log.c \
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS/cmsis_os.c \
 Middlewares/Third_Party/FreeRTOS/Source/croutine.c \
 Middlewares/Third_Party/FreeRTOS/Source/event_groups.c \
@@ -224,6 +235,8 @@ C_INCLUDES =  \
 -IDrivers/RGB_LED \
 -IDrivers/STM32G4xx_HAL_Driver/Inc \
 -IDrivers/STM32G4xx_HAL_Driver/Inc/Legacy \
+-IDrivers/VL53L0X/core/inc \
+-IDrivers/VL53L0X/platform/inc \
 -IMiddlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS \
 -IMiddlewares/Third_Party/FreeRTOS/Source/include \
 -IMiddlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
