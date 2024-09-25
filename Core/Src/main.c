@@ -29,7 +29,7 @@
 /* USER CODE BEGIN Includes */
 #include "lora.h"
 #include "rgb.h"
-
+#include "vl53l0x.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -95,12 +95,14 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+  
   MX_GPIO_Init();
   MX_DMA_Init();
   MX_TIM2_Init();
   MX_SPI3_Init();
   MX_TIM3_Init();
   MX_I2C1_Init();
+
   /* USER CODE BEGIN 2 */
 
   LL_SPI_Enable(SPI3);
@@ -117,12 +119,14 @@ int main(void)
 	  .output_power = 14,
 	  .lna_gain = 6
   };
-
+  
   LoRa_Init(&lora);
   Lora_Init_Receive();
   RGB_Init();
   RGB_Set_Color(255, 125, 0);
+  VL53L0X_Init();
 
+  
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in cmsis_os2.c) */
@@ -144,6 +148,8 @@ int main(void)
   {
     Error_Handler();
   }
+
+
 
   /* Start scheduler */
   osKernelStart();

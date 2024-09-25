@@ -143,7 +143,7 @@ void MX_GPIO_Init(void)
   NVIC_SetPriority(EXTI2_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),5, 0));
   NVIC_EnableIRQ(EXTI2_IRQn);
   NVIC_SetPriority(EXTI3_IRQn, NVIC_EncodePriority(NVIC_GetPriorityGrouping(),5, 0));
-  NVIC_EnableIRQ(EXTI3_IRQn);
+  //NVIC_EnableIRQ(EXTI3_IRQn);
 
 }
 

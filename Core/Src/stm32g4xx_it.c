@@ -23,7 +23,7 @@
 #include "lora.h"
 #include "motor.h"
 #include "rgb.h"
-
+#include "vl53l0x.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 /* USER CODE END Includes */
@@ -241,4 +241,16 @@ void DMA1_Channel1_IRQHandler(void)
   /* USER CODE BEGIN DMA1_Channel1_IRQn 1 */
 
   /* USER CODE END DMA1_Channel1_IRQn 1 */
+}
+
+void EXTI3_IRQHandler(void)
+{
+    uint16_t test;
+    LL_EXTI_ClearFlag_0_31(LL_EXTI_LINE_3);
+    test = VL53L0X_Get_Distance_IT();
+    if(test < 10)
+    {
+      LL_GPIO_TogglePin(GPIOA, LL_GPIO_PIN_5);
+    }
+
 }
