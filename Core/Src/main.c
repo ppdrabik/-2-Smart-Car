@@ -30,6 +30,7 @@
 #include "lora.h"
 #include "rgb.h"
 #include "vl53l0x.h"
+#include "buzzer.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -125,7 +126,7 @@ int main(void)
   RGB_Init();
   RGB_Set_Color(255, 125, 0);
   VL53L0X_Init();
-
+  BUZZER_Set_Frequency(1000);
   
   /* USER CODE END 2 */
 

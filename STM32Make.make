@@ -90,6 +90,7 @@ Core/Src/system_stm32g4xx.c \
 Core/Src/tim.c \
 Core/Src/vl53l0x.c \
 Drivers/BSP/STM32G4xx_Nucleo/stm32g4xx_nucleo.c \
+Drivers/Buzzer/buzzer.c \
 Drivers/LoRa/lora.c \
 Drivers/Motor/motor.c \
 Drivers/RGB_LED/rgb.c \
@@ -228,6 +229,7 @@ AS_INCLUDES = \
 C_INCLUDES =  \
 -ICore/Inc \
 -IDrivers/BSP/STM32G4xx_Nucleo \
+-IDrivers/Buzzer \
 -IDrivers/CMSIS/Device/ST/STM32G4xx/Include \
 -IDrivers/CMSIS/Include \
 -IDrivers/Lora \
