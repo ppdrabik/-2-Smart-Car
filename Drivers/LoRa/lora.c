@@ -127,6 +127,9 @@ void LoRa_Set_Pa_Boost(bool set_rest)
   	LoRa_Write(ADDR_REGPACONFIG, read_value);
 }
 
+/*
+ * Set Max Output Power: 0 to 7
+ */
 
 void LoRa_Set_Max_Output_Power(uint8_t value)
 {
@@ -138,7 +141,9 @@ void LoRa_Set_Max_Output_Power(uint8_t value)
 	}
 }
 
-
+/*
+ * Set Output Power: 0 to 15
+ */
 void LoRa_Set_Output_Power(uint8_t value)
 {
 	if(value <= 15)
@@ -150,7 +155,9 @@ void LoRa_Set_Output_Power(uint8_t value)
 
 }
 
-
+/*
+ * Set Lna Gain: 0 to 7
+ */
 void LoRa_Set_Lna_Gain(uint8_t value)
 {
 	if(value <= 7)
@@ -165,8 +172,7 @@ void LoRa_Set_Lna_Gain(uint8_t value)
 void LoRa_Init(lora_s *lora)
 {
 	LoRa_Mode(SLEEP);
-	/* Set LoRa Mode */
-	LoRa_Write(ADDR_REGOPMODE, 0x88);		
+	LoRa_Write(ADDR_REGOPMODE, 0x88);	/* Set LoRa Mode */	
 	LoRa_Set_Bandwidth(lora->bandwidth);
 	LoRa_Set_Spreading_Factor(lora->sf);
 	LoRa_Set_Pa_Boost(lora->pa_boost);

@@ -1,88 +1,80 @@
 #include "motor.h"
 
-static axis_s axis;
-static state_s MOTOR_Get_State();
+static motor_t motor;
 
-void MOTOR_Get_Data()
+static void MOTOR_Set_State();
+static void MOTOR_Get_Data();
+
+static void MOTOR_Get_Data()
 {
     const rx_buffer_s *buffer = LoRa_Get_Buffer();
-    axis.y = buffer->data[0];
-    axis.x = buffer->data[1];
+    motor.axis_value.y = buffer->data[0];
+    motor.axis_value.x = buffer->data[1];
 }
 
-static state_s MOTOR_Get_State()
+static void MOTOR_Set_State()
 {
     MOTOR_Get_Data();
-    state_s current_state;
 
-    if(axis.y == 1)
-	{
-		current_state.y_state = DRIVE;
-    }
-    else if (axis.y == -1)
+    if (motor.axis_value.y == 1)
     {
-        current_state.y_state = REVERSE;
+        motor.state_value.y_state = DRIVE;
+    }
+    else if (motor.axis_value.y == -1)
+    {
+        motor.state_value.y_state = REVERSE;
     }
     else
     {
-        current_state.y_state = IDLE;
+        motor.state_value.y_state = IDLE;
     }
 
-    
-    if(axis.x == 1)
+    if (motor.axis_value.x == 1)
     {
-        current_state.x_state = RIGHT;
+        motor.state_value.x_state = RIGHT;
     }
-    else if (axis.x == -1)
+    else if (motor.axis_value.x == -1)
     {
-        current_state.x_state = LEFT;
+        motor.state_value.x_state = LEFT;
     }
     else
     {
-        current_state.x_state = IDLE;
+        motor.state_value.x_state = IDLE;
     }
-    
-    return current_state;
 }
-
 
 void MOTOR_1_Drive()
 {
     LL_GPIO_SetOutputPin(GPIOA, IN_1_Pin);
-	LL_GPIO_ResetOutputPin(GPIOA, IN_2_Pin);
+    LL_GPIO_ResetOutputPin(GPIOA, IN_2_Pin);
     LL_TIM_OC_SetCompareCH1(TIM2, PWM_1_DUTY_CYCLE);
 }
-
 
 void MOTOR_1_Reverse()
 {
     LL_GPIO_ResetOutputPin(GPIOA, IN_1_Pin);
-	LL_GPIO_SetOutputPin(GPIOA, IN_2_Pin);
+    LL_GPIO_SetOutputPin(GPIOA, IN_2_Pin);
     LL_TIM_OC_SetCompareCH1(TIM2, PWM_1_DUTY_CYCLE);
 }
-
 
 void MOTOR_2_Right()
 {
     LL_GPIO_SetOutputPin(GPIOB, IN_3_Pin);
-	LL_GPIO_ResetOutputPin(GPIOB, IN_4_Pin);
+    LL_GPIO_ResetOutputPin(GPIOB, IN_4_Pin);
     LL_TIM_OC_SetCompareCH2(TIM2, PWM_2_DUTY_CYCLE);
 }
-
 
 void MOTOR_2_Left()
 {
     LL_GPIO_ResetOutputPin(GPIOB, IN_3_Pin);
-	LL_GPIO_SetOutputPin(GPIOB, IN_4_Pin);
+    LL_GPIO_SetOutputPin(GPIOB, IN_4_Pin);
     LL_TIM_OC_SetCompareCH2(TIM2, PWM_2_DUTY_CYCLE);
 }
-
 
 void MOTOR_1_Idle()
 {
     LL_TIM_OC_SetCompareCH1(TIM2, PWM_IDLE_DUTY_CYCLE);
 }
-
 
 void MOTOR_2_Idle()
 {
@@ -91,45 +83,52 @@ void MOTOR_2_Idle()
 
 void MOTOR_Set_Direction()
 {
-    state_s state = MOTOR_Get_State();
+    MOTOR_Set_State();
 
-    switch (state.y_state)
-	{
-	case IDLE:
-		MOTOR_1_Idle();
+    switch (motor.state_value.y_state)
+    {
+    case IDLE:
+        MOTOR_1_Idle();
         printf("IDLE:%lu \n\r", TIM2->CCR1);
-		break;
+        break;
 
-	case DRIVE:
-		MOTOR_1_Drive();
+    case DRIVE:
+        MOTOR_1_Drive();
         printf("DRIVE:%lu \n\r", TIM2->CCR1);
-		break;
+        break;
 
-	case REVERSE:
-		MOTOR_1_Reverse();
+    case REVERSE:
+        MOTOR_1_Reverse();
         printf("REVERSE:%lu \n\r", TIM2->CCR1);
-		break;
+        break;
 
-	default: break;
-	}
+    default:
+        break;
+    }
 
-	switch (state.x_state)
-	{
-	case IDLE:
-		MOTOR_2_Idle();
+    switch (motor.state_value.x_state)
+    {
+    case IDLE:
+        MOTOR_2_Idle();
         printf("IDLE:%lu \n\r", TIM2->CCR2);
-		break;
+        break;
 
-	case RIGHT:
-		MOTOR_2_Right();
+    case RIGHT:
+        MOTOR_2_Right();
         printf("RIGHT:%lu \n\r", TIM2->CCR2);
-		break;
+        break;
 
-	case LEFT:
-		MOTOR_2_Left();
+    case LEFT:
+        MOTOR_2_Left();
         printf("LEFT:%lu \n\r", TIM2->CCR2);
-		break;
+        break;
 
-	default: break;
-	}
+    default:
+        break;
+    }
+}
+
+const motor_t *MOTOR_Get_Struct_Data(void)
+{
+    return &motor;
 }

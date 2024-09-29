@@ -5,43 +5,42 @@
 #include <main.h>
 #include <stdbool.h>
 
-#define NSS_PIN_HIGH 	LL_GPIO_SetOutputPin(GPIOA, SPI_NSS_Pin);
-#define NSS_PIN_LOW		LL_GPIO_ResetOutputPin(GPIOA, SPI_NSS_Pin);
-#define SPI_HANDLER	SPI3
+#define NSS_PIN_HIGH LL_GPIO_SetOutputPin(GPIOA, SPI_NSS_Pin);
+#define NSS_PIN_LOW LL_GPIO_ResetOutputPin(GPIOA, SPI_NSS_Pin);
+#define SPI_HANDLER SPI3
 
-#define CLEAR_BITS(REG, MASK)   ((REG) &= ~(MASK))
-#define SET_BITS(REG, MASK)     ((REG) |= (MASK))
+#define CLEAR_BITS(REG, MASK) ((REG) &= ~(MASK))
+#define SET_BITS(REG, MASK) ((REG) |= (MASK))
 
-#define RX_BUFFER_SIZE	2
+#define RX_BUFFER_SIZE 2
 
-#define ADDR_REGFIFO					0x00
-#define ADDR_REGOPMODE					0x01
-#define ADDR_REGFRMSB					0x06
-#define ADDR_REGFRMID					0x07
-#define ADDR_REGFRLSB					0x08
-#define ADDR_REGPACONFIG				0x09
-#define ADDR_REGPARAMP					0x0A
-#define ADDR_REGOCP						0x0B
-#define ADDR_REGLNA						0x0C
-#define ADDR_REGFIFOADDPTR				0x0D
-#define ADDR_REGFIFOTXBASEADDR			0x0E
-#define ADDR_REGFIFORXBASEADDR			0x0F
-#define ADDR_REGFIFORXCURRENTADDR		0x10
-#define ADDR_REGIRQFLAGS				0x12
-#define ADDR_REGRXNBBYTES				0x13
-#define ADDR_REGPKTRSSIVALUE			0x1A
-#define	ADDR_REGMODEMCONFIG1			0x1D
-#define ADDR_REGMODEMCONFIG2			0x1E
-#define ADDR_REGMODEMSTAT				0x18
-#define ADDR_REGSYMBTIMEOUTL			0x1F
-#define ADDR_REGPREAMBLEMSB				0x20
-#define ADDR_REGPREAMBLELSB				0x21
-#define ADDR_REGPAYLOADLENGTH			0x22
-#define ADDR_REGDIOMAPPING1				0x40
-#define ADDR_REGDIOMAPPING2				0x41
-#define ADDR_REGVERSION					0x42
-#define ADDR_REGRSSIVALUE				0x1B
-
+#define ADDR_REGFIFO 0x00
+#define ADDR_REGOPMODE 0x01
+#define ADDR_REGFRMSB 0x06
+#define ADDR_REGFRMID 0x07
+#define ADDR_REGFRLSB 0x08
+#define ADDR_REGPACONFIG 0x09
+#define ADDR_REGPARAMP 0x0A
+#define ADDR_REGOCP 0x0B
+#define ADDR_REGLNA 0x0C
+#define ADDR_REGFIFOADDPTR 0x0D
+#define ADDR_REGFIFOTXBASEADDR 0x0E
+#define ADDR_REGFIFORXBASEADDR 0x0F
+#define ADDR_REGFIFORXCURRENTADDR 0x10
+#define ADDR_REGIRQFLAGS 0x12
+#define ADDR_REGRXNBBYTES 0x13
+#define ADDR_REGPKTRSSIVALUE 0x1A
+#define ADDR_REGMODEMCONFIG1 0x1D
+#define ADDR_REGMODEMCONFIG2 0x1E
+#define ADDR_REGMODEMSTAT 0x18
+#define ADDR_REGSYMBTIMEOUTL 0x1F
+#define ADDR_REGPREAMBLEMSB 0x20
+#define ADDR_REGPREAMBLELSB 0x21
+#define ADDR_REGPAYLOADLENGTH 0x22
+#define ADDR_REGDIOMAPPING1 0x40
+#define ADDR_REGDIOMAPPING2 0x41
+#define ADDR_REGVERSION 0x42
+#define ADDR_REGRSSIVALUE 0x1B
 
 typedef enum
 {
@@ -53,10 +52,10 @@ typedef enum
 	RXCONTINUOUS = 0x05,
 	RXSINGLE = 0x06,
 	CAD = 0x07
-}mode_e;
+} mode_e;
 
-
-typedef enum {
+typedef enum
+{
 	khz_7_8,
 	khz_10_4,
 	khz_15_7,
@@ -67,43 +66,41 @@ typedef enum {
 	khz_125,
 	khz_250,
 	khz_500
-}bandwidth_e;
+} bandwidth_e;
 
-
-typedef enum {
+typedef enum
+{
 	CR_4_5 = 0x01,
 	CR_4_6,
 	CR_4_7,
 	CR_4_8,
-}coding_rate_e;
+} coding_rate_e;
 
-
-typedef enum {
+typedef enum
+{
 	SF_6 = 0x06,
 	SF_7,
 	SF_8,
 	SF_9,
 	SF_10,
 	SF_11,
-    SF_12,
-}spreading_factor_e;
-
+	SF_12,
+} spreading_factor_e;
 
 typedef struct
 {
-    bandwidth_e bandwidth;
+	bandwidth_e bandwidth;
 	spreading_factor_e sf;
 	bool pa_boost;
 	uint8_t max_power;
 	uint8_t output_power;
 	uint8_t lna_gain;
-}lora_s;
+} lora_s;
 
 typedef struct
 {
-    int8_t data[RX_BUFFER_SIZE];
-}rx_buffer_s;
-
+	int8_t data[RX_BUFFER_SIZE];
+} rx_buffer_s;
 
 void LoRa_Write(uint8_t reg_address, uint8_t reg_value);
 uint8_t LoRa_Receive(uint8_t reg_address);

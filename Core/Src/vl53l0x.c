@@ -5,6 +5,11 @@ static VL53L0X_DEV dev = &dev_objt;
 static vl53l0x_s vl53l0x;
 
 
+/**
+ * @brief Function initilize ToF Sensor.
+ * Be sure to disable interrupt before inicialization
+ */
+
 void VL53L0X_Init()
 {
     dev->I2cHandle = &hi2c1;
@@ -24,15 +29,15 @@ void VL53L0X_Init()
         VL53L0X_GPIOFUNCTIONALITY_NEW_MEASURE_READY, 
         VL53L0X_INTERRUPTPOLARITY_HIGH
         );
-
     VL53L0X_ClearInterruptMask(dev, -1); 
     VL53L0X_SetDeviceMode(dev, VL53L0X_DEVICEMODE_CONTINUOUS_RANGING);
     VL53L0X_StartMeasurement(dev);
-
-    NVIC_EnableIRQ(EXTI3_IRQn);
 }
 
-
+/**
+ * @brief Function return distance in milimeters.
+ *
+ */
 uint16_t VL53L0X_Get_Distance_IT()
 {   
     VL53L0X_ClearInterruptMask(dev, -1);
