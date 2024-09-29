@@ -1,0 +1,65 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    height: 100%;
+    width: 100%;
+    
+}
+
+
+.up_down {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    background: none;
+    text-align: left;
+    
+    height: 80vh;
+    width: 50vh;
+}
+.right_left{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr;
+    background: none;
+    text-align: right;
+    
+    height: 80vh;
+    width: 50vh;
+}
+
+#left,#right,#reverse{
+  background-color: #ff7b00;
+  border-radius: 20px;
+  border: 2px solid #dcdcdc;
+  cursor: pointer;
+  color: #000000;
+  font-family: 'Inter';
+  font-size: 14px;
+  font-weight: 600;
+  width: 100%;
+  height: 100%;
+}
+
+#forward{
+    background-color: #ff7b00;
+    border-radius: 20px;
+    border: 2px solid #dcdcdc;
+    cursor: pointer;
+    color: #000000;
+    font-family: 'Inter';
+    font-size: 14px;
+    font-weight: 600;
+    width: 100%;
+    height: 100%;
+   
+  }
+
+#forward:active,#right:active,#left:active,#reverse:active {
+    background-color: red; /* zmień kolor tła trójkąta po naciśnięciu */
+}

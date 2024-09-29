@@ -1,0 +1,19 @@
+{
+	"folders": [
+		{
+			"path": "D:/Pobrane/Zalaczniki/Zalaczniki/Pliki projektu/sketch_oct18a/data"
+		},
+		{
+			"path": "../.."
+		},
+		{
+			"path": "../../../myJoystick"
+		},
+		{
+			"path": "../../../data"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "Joystick"
+	}
+}
