@@ -8,254 +8,223 @@
 #include "LoRa.h"
 
 
-static void spi_write_8(uint8_t data);
-static uint8_t spi_read_8(uint8_t data);
+static void SPI_Write_8(uint8_t data);
+static uint8_t SPI_Receive_8(uint8_t reg_address);
 
 
-static void spi_write_8(uint8_t data)
+static void SPI_Write_8(uint8_t data)
 {
 	  SPI.transfer(data);
 }
 
-
-static uint8_t spi_read_8(uint8_t reg_addr)
+static uint8_t SPI_Receive_8(uint8_t reg_address)
 {
-    uint8_t recieve_data = 0;
-	  SPI.transfer(reg_addr);
-	  recieve_data = SPI.transfer(0xFF);
-	  return recieve_data;
+    uint8_t data_received = 0;
+	  SPI.transfer(reg_address);
+	  data_received = SPI.transfer(0xFF);
+	  return data_received;
 }
 
-
-void lora_write(uint8_t reg_addr, uint8_t reg_value)
+void LoRa_Write(uint8_t reg_address, uint8_t reg_value)
 {
+	SET_BIT(reg_address, 1<<7);
+
 	NSS_PIN_LOW
-	uint8_t write_addr = 0;
-	write_addr = reg_addr | 0x80;
-	spi_write_8(write_addr);
-	spi_write_8(reg_value);
+	SPI_Write_8(reg_address);
+	SPI_Write_8(reg_value);
 	NSS_PIN_HIGH
 }
 
 
-uint8_t lora_read(uint8_t reg_addr)
+uint8_t LoRa_Receive(uint8_t reg_address)
 {
-	uint8_t addr = 0;
-	uint8_t temp = 0;
-	addr = reg_addr & 0x7F;
+	uint8_t data_received = 0;
+	CLEAR_BIT(reg_address, 1<<7);
+
 	NSS_PIN_LOW
-	temp = spi_read_8(addr);
+	data_received = SPI_Receive_8(reg_address);
 	NSS_PIN_HIGH
-	return temp;
+	return data_received;
 }
 
-
-void lora_mode(mode_e mode)
+void LoRa_Mode(mode_e mode)
 {
-	/* mask 0xf8 */
-	uint8_t read_value = 0;
-	read_value = lora_read(ADDR_REGOPMODE);
-	read_value = read_value & 0xf8; /* set bit that you want to change to 0 */
-	read_value = read_value | mode; /* add bits you want */
-	lora_write(ADDR_REGOPMODE, read_value);
+	uint8_t read_value = LoRa_Receive(ADDR_REGOPMODE);
+	CLEAR_BITS(read_value, 0x07);
+	SET_BITS(read_value, mode);
+	LoRa_Write(ADDR_REGOPMODE, read_value);
 }
 
-void lora_set_bandwidth(bandwidth_e bandwidth)
+
+void LoRa_Set_Bandwidth(bandwidth_e bandwidth)
 {
-	uint8_t read_value = 0;
-	read_value = lora_read(ADDR_REGMODEMCONFIG1);
-	read_value = read_value & 0x0f;
-	read_value = read_value | bandwidth<<4;
-	lora_write(ADDR_REGMODEMCONFIG1, read_value);
+	uint8_t read_value = LoRa_Receive(ADDR_REGMODEMCONFIG1);
+	CLEAR_BITS(read_value, 0xf0);
+	SET_BITS(read_value, (bandwidth << 4));
+	LoRa_Write(ADDR_REGMODEMCONFIG1, read_value);
 }
 
-void lora_set_coding_rate(coding_rate_e coding_rate)
+
+void LoRa_Set_Coding_Rate(coding_rate_e coding_rate)
 {
-	uint8_t read_value = 0;
-	read_value = lora_read(ADDR_REGMODEMCONFIG1);
-	read_value = read_value & 0xf1;
-	read_value = read_value | coding_rate<<1;
-	lora_write(ADDR_REGMODEMCONFIG1, read_value);
+	uint8_t read_value = LoRa_Receive(ADDR_REGMODEMCONFIG1);
+	CLEAR_BITS(read_value, 0x0e);
+	SET_BITS(read_value, coding_rate<<1);
+	LoRa_Write(ADDR_REGMODEMCONFIG1, read_value);
 }
 
-void lora_set_spreading_factor(spreading_factor_e SF)
+
+void LoRa_Set_Spreading_Factor(spreading_factor_e SF)
 {
-	uint8_t read_value = 0;
-	read_value = lora_read(ADDR_REGMODEMCONFIG2);
-	read_value = read_value & 0x0f;
-	read_value = read_value | SF<<4;
-	lora_write(ADDR_REGMODEMCONFIG2, read_value);
+	uint8_t read_value = LoRa_Receive(ADDR_REGMODEMCONFIG2);
+	CLEAR_BITS(read_value, 0xf0);
+	SET_BITS(read_value, SF<<4);
+	LoRa_Write(ADDR_REGMODEMCONFIG2, read_value);
 }
 
-void lora_set_crc(bool_e set_rest)
+
+void LoRa_Set_CRC(bool set_rest)
 {
-  uint8_t read_value = 0;
-  read_value = lora_read(ADDR_REGMODEMCONFIG2);
-  if(set_rest == SET_BIT)
-  {
-    read_value = read_value | 0x04;
-  }
-  else
-  {
-    read_value = read_value & 0xfb;
-  }
-  lora_write(ADDR_REGMODEMCONFIG2, read_value);
+	uint8_t read_value = LoRa_Receive(ADDR_REGMODEMCONFIG2);
+	if(set_rest == true)
+	{
+		SET_BIT(read_value, 1<<2);
+	}
+	else
+  	{
+    	CLEAR_BIT(read_value, 1<<2);
+  	}
+  	LoRa_Write(ADDR_REGMODEMCONFIG2, read_value);
 }
 
+
+void LoRa_Set_Pa_Boost(bool set_rest)
+{
+	uint8_t read_value = LoRa_Receive(ADDR_REGPACONFIG);
+  	if(set_rest == true)
+  	{
+		SET_BIT(read_value, 1<<7);
+  	}
+  	else
+  	{
+    	CLEAR_BIT(read_value, 1<<7);
+  	}
+  	LoRa_Write(ADDR_REGPACONFIG, read_value);
+}
 
 /*
- * REG: RegPaConfig(0x09)
- * BIT: 7
- * PA_BOOST: SET - Max Output Power limited to +20dBm
- * PA_BOOST: RESET - Max Output Power limited to +14dBm
- */
-void lora_set_pa_boost(bool_e set_rest)
-{
-  uint8_t read_value = 0;
-  read_value = lora_read(ADDR_REGPACONFIG);
-  if(set_rest == SET_BIT)
-  {
-    read_value = read_value | (1<<7);
-  }
-  else
-  {
-    read_value = read_value & ~(1<<7);
-  }
-  lora_write(ADDR_REGPACONFIG, read_value);
-}
-
-
-/*
- * REG: RegPaConfig(0x09)
- * BIT: 6-4
  * Set Max Output Power: 0 to 7
  */
 
-void lora_set_max_output_power(uint8_t set_rest)
+void LoRa_Set_Max_Output_Power(uint8_t value)
 {
-	if(set_rest <= 7)
+	if(value <= 7)
 	{
-		  uint8_t read_value = 0;
-		  read_value = lora_read(ADDR_REGPACONFIG);
-		  read_value = read_value | (set_rest)<<4;
-		  lora_write(ADDR_REGPACONFIG, read_value);
+		uint8_t read_value = LoRa_Receive(ADDR_REGPACONFIG);
+		SET_BITS(read_value, (value)<<4);
+		LoRa_Write(ADDR_REGPACONFIG, read_value);
 	}
 }
 
 /*
- * REG: RegPaConfig(0x09)
- * BIT: 3-0
- * Set Max Output Power: 0 to 15
+ * Set Output Power: 0 to 15
  */
-
-void lora_set_output_power(uint8_t set_rest)
+void LoRa_Set_Output_Power(uint8_t value)
 {
-	if(set_rest <= 15)
+	if(value <= 15)
 	{
-		uint8_t read_value = 0;
-		read_value = lora_read(ADDR_REGPACONFIG);
-		read_value = read_value | (set_rest);
-		lora_write(ADDR_REGPACONFIG, read_value);
+		uint8_t read_value = LoRa_Receive(ADDR_REGPACONFIG);
+		SET_BITS(read_value, value);
+		LoRa_Write(ADDR_REGPACONFIG, read_value);
 	}
 
 }
 
 /*
- * REG: RegLna(0x0C)
- * BIT: 7-5
- * Set Max Output Power: 0 to 7
+ * Set Lna Gain: 0 to 7
  */
-void lora_set_lna_gain(uint8_t set_rest)
+void LoRa_Set_Lna_Gain(uint8_t value)
 {
-	if(set_rest <= 7)
+	if(value <= 7)
 	{
-		uint8_t read_value = 0;
-		read_value = lora_read(ADDR_REGLNA);
-		read_value = read_value | (set_rest)<<5;
-		lora_write(ADDR_REGLNA, read_value);
+		uint8_t read_value = LoRa_Receive(ADDR_REGLNA);
+		SET_BITS(read_value, (value)<<5);
+		LoRa_Write(ADDR_REGLNA, read_value);
 	}
 }
 
 
-void lora_init_transmit()
+void LoRa_Init_Transmit()
 {
-    lora_write(ADDR_REGDIOMAPPING1, 0x40);  /* Map Pin DIO0 for interrupt when TX done */
-    lora_write(ADDR_REGIRQFLAGS, 0xFF);     /* Clear interrupts flags */
-    lora_set_crc(SET_BIT); 					/* SET CRC enable */
+    LoRa_Write(ADDR_REGDIOMAPPING1, 0x40);  /* Map Pin DIO0 for interrupt when TX done */
+    LoRa_Write(ADDR_REGIRQFLAGS, 0xFF);     /* Clear interrupts flags */
+    LoRa_Set_CRC(true); 					/* SET CRC enable */
 }
 
 
-void lora_transmit_8(int8_t *data, uint8_t length)
+void LoRa_Transmit_8(int8_t *data, uint8_t length)
 {
     uint8_t fifo_current_address = 0;
-    lora_mode(STDBY);
-    fifo_current_address = lora_read(ADDR_REGFIFOTXBASEADDR);   /* Read pointer from where data to Tx will be stored */
-    lora_write(ADDR_REGFIFOADDPTR, fifo_current_address);       /* Write address of pointer */ 
-    lora_write(ADDR_REGPAYLOADLENGTH, length);                  /* Write data length */
+    LoRa_Mode(STDBY);
+    fifo_current_address = LoRa_Receive(ADDR_REGFIFOTXBASEADDR);   /* Read pointer from where data to Tx will be stored */
+    LoRa_Write(ADDR_REGFIFOADDPTR, fifo_current_address);       /* Write address of pointer */ 
+    LoRa_Write(ADDR_REGPAYLOADLENGTH, length);                  /* Write data length */
     for (uint8_t i = 0; i < length; i++)
     {
-        lora_write(ADDR_REGFIFO, data[i]);                      /* Write data to FIFO, Pointer increment itself*/
+        LoRa_Write(ADDR_REGFIFO, data[i]);                      /* Write data to FIFO, Pointer increment itself*/
     }
-    lora_mode(TX);
+    LoRa_Mode(TX);
     while(digitalRead(D2) == 0){yield();};   
 }
 
-void lora_init_receive()
+void Lora_Init_Receive()
 {
-    lora_write(ADDR_REGDIOMAPPING1, 0x00);  /* Map Pin DIO0 for interrupt when RX done */
-    lora_write(ADDR_REGIRQFLAGS, 0xFF);     /* Clear interrupts flags */
-	  lora_set_crc(RESET_BIT);				/* CRC only on TX side in Explicit mode */
+    LoRa_Write(ADDR_REGDIOMAPPING1, 0x00);  /* Map Pin DIO0 for interrupt when RX done */
+    LoRa_Write(ADDR_REGIRQFLAGS, 0xFF);     /* Clear interrupts flags */
+	  LoRa_Set_CRC(false);				/* CRC only on TX side in Explicit mode */
 }
 
-void lora_recieve_8(uint8_t *recieved_data, uint8_t length)
+void LoRa_Recieve_8(uint8_t *recieved_data, uint8_t length)
 {
   uint8_t fifo_current_address = 0;
   uint8_t bytes_received = 0;
 
 
-	lora_mode(STDBY);
-	fifo_current_address = lora_read(ADDR_REGFIFORXBASEADDR);
-	lora_write(ADDR_REGFIFOADDPTR, fifo_current_address);
-	lora_mode(RXCONTINUOUS);
+	LoRa_Mode(STDBY);
+	fifo_current_address = LoRa_Receive(ADDR_REGFIFORXBASEADDR);
+	LoRa_Write(ADDR_REGFIFOADDPTR, fifo_current_address);
+	LoRa_Mode(RXCONTINUOUS);
 
   while(digitalRead(D2) == 0){yield();};
 
-  bytes_received = lora_read(ADDR_REGRXNBBYTES);
-	fifo_current_address = lora_read(ADDR_REGFIFORXBASEADDR);
-	lora_write(ADDR_REGFIFOADDPTR, fifo_current_address);
+  bytes_received = LoRa_Receive(ADDR_REGRXNBBYTES);
+	fifo_current_address = LoRa_Receive(ADDR_REGFIFORXBASEADDR);
+	LoRa_Write(ADDR_REGFIFOADDPTR, fifo_current_address);
 	for (uint8_t i = 0; i < bytes_received; i++)
 	{
     /* Write data to FIFO, Pointer to next data increment itself*/
-		recieved_data[i] = lora_read(ADDR_REGFIFO);  
+		recieved_data[i] = LoRa_Receive(ADDR_REGFIFO);  
     
 	}
-	lora_write(ADDR_REGIRQFLAGS, 0xFF);
+	LoRa_Write(ADDR_REGIRQFLAGS, 0xFF);
 }
 
 
-void lora_init(lora_s *lora)
+void LoRa_Init(lora_s *lora)
 {
-  /*
-	 * Header = Explicit
-	 * Preamble length = 8
-	 *
-	 */
   pinMode(D1, OUTPUT); // NSS
   pinMode(D2, INPUT); // DIO0
 
   SPI.begin();
   SPI.beginTransaction(SPISettings(6500000, MSBFIRST, SPI_MODE0));
-	lora_mode(SLEEP);
 
-	/* SET LORA MODE */
-	lora_write(ADDR_REGOPMODE, 0x88); 		/* Set LoRa Mode */
-	lora_set_bandwidth(lora->bandwidth);
-	lora_set_spreading_factor(lora->sf);
-	lora_set_pa_boost(lora->pa_boost);
-	lora_set_max_output_power(lora->max_power);
-	lora_set_output_power(lora->output_power);
-	lora_set_lna_gain(lora->lna_gain);
+	LoRa_Mode(SLEEP);
+	LoRa_Write(ADDR_REGOPMODE, 0x88); 		/* Set LoRa Mode */
+	LoRa_Set_Bandwidth(lora->bandwidth);
+	LoRa_Set_Spreading_Factor(lora->sf);
+	LoRa_Set_Pa_Boost(lora->pa_boost);
+	LoRa_Set_Max_Output_Power(lora->max_power);
+	LoRa_Set_Output_Power(lora->output_power);
+	LoRa_Set_Lna_Gain(lora->lna_gain);
 }
-
-
 

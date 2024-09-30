@@ -15,7 +15,7 @@ const char *ssid = "POCO F2 Pro";
 const char *password = "haslo123";
 
 
-void WIFI_Init()
+void WIFI_Init();
 void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length);
 void LOAD_Html();
 void LOAD_CSS();
@@ -38,25 +38,25 @@ void setup()
   {
 	.bandwidth = khz_125,
 	.sf = SF_10,
-	.pa_boost = SET_BIT,
+	.pa_boost = true,
 	.max_power = 3,
 	.output_power = 14,
 	.lna_gain = 6
   };
 
-  lora_init(&lora);
-  lora_init_transmit();
+  LoRa_Init(&lora);
+  LoRa_Init_Transmit();
 
   delay(50);
   LittleFS.begin();
   delay(50);
-  init_wifi();
+  WIFI_Init();
   delay(50);
   webSocket.begin();
   webSocket.onEvent(webSocketEvent);
-  server.on( "/" , load_Html );
-  server.on( "/style.css", load_CSS);
-  server.on( "/script.js", load_JS2);
+  server.on( "/" , LOAD_Html);
+  server.on( "/style.css", LOAD_CSS);
+  server.on( "/script.js", LOAD_JS);
   server.begin();
   delay(5);
 }
@@ -110,7 +110,7 @@ void webSocketEvent(uint8_t num, WStype_t type, uint8_t * payload, size_t length
         axis.y = doc["y"];
         axis.data[0] = axis.x;
         axis.data[1] = axis.y;
-        lora_transmit_8(axis.data, 2);
+        LoRa_Transmit_8(axis.data, 2);
         Serial.println("Transmit..");
       }
       break;
