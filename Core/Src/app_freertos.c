@@ -54,6 +54,7 @@ void vLORA_Rx_Task(void *pvParameters)
             else
             {
                 NVIC_DisableIRQ(EXTI3_IRQn);
+                BUZZER_Off();
             } 
         }
     }
@@ -72,15 +73,15 @@ void vReversing_Task(void *pvParameters)
         if (ulEvent > 0)
         {
             distance = VL53L0X_Get_Distance_IT();
-            if (distance < 15)
+            if (distance < 100)
             {
                 BUZZER_Toggle();
-                printf("Distance <15 \n\r");
+                //printf("Distance <15 \n\r");
             }
-            if (distance < 5)
+            if (distance < 50)
             {
                 BUZZER_On();
-                printf("Distance <5 \n\r");
+                //printf("Distance <5 \n\r");
             }
         }
         
